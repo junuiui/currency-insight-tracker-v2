@@ -25,9 +25,9 @@ The transition from Serverless to a Containerized architecture was driven by sev
 ## 🗺 Implementation Roadmap (TODOs)
 
 ### Phase 1: Application Modernization
--  **Decouple Backend**: Refactor Lambda logic into a standalone Express/FastAPI server.
-- [ ] **Containerization**: Write a multi-stage `Dockerfile` to optimize image size.
-- [ ] **Local Testing**: Verify the containerized app using `docker-compose`.
+- [x] **Decouple Backend**: Refactor Lambda logic into a standalone Express/FastAPI server.
+- [x] **Containerization**: Write a multi-stage `Dockerfile` to optimize image size.
+- [x] **Local Testing**: Verify the containerized app using `docker-compose`.
 
 ### Phase 2: Infrastructure as Code (Terraform)
 - [ ] **Networking (VPC)**: Design a VPC with Public/Private subnets, IGW, and NAT Gateway.
