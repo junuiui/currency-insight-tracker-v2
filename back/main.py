@@ -1,18 +1,22 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Query, HTTPException
+from datetime import datetime, timedelta
+import logging
 import boto3
 from boto3.dynamodb.conditions import Key
 
-# Load .env
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
+# Logging setup
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # FastAPI starts here
 app = FastAPI()
 
-dynamodb = boto3.resource("dynamodb", region_name=os.getenv("AWS_REGION_NAME"))
-table = dynamodb.Table(os.getenv("AWS_DYNAMODB_TABLE_NAME"))
+import os
+REGION = os.getenv("AWS_REGION", "us-west-2")
+TABLE_NAME = os.getenv("DYNAMODB_TABLE", "CurrencyRates")
+
+dynamodb = boto3.resource("dynamodb", region_name=REGION)
+table = dynamodb.Table(TABLE_NAME)
 
 
 @app.get("/")
@@ -26,13 +30,30 @@ def health_check():
 
 
 @app.get("/api/rates")
-def get_rates():
+async def get_rates(
+    pair: str = Query("CAD_KRW", description="Currency pair to fetch"),
+    days: int = Query(30, description="Number of days to look back"),
+):
+    end_date = datetime.now().strftime("%Y-%m-%d")
+    start_date = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
+
     try:
-        response = table.scan()
-        items = response.get("Items", []) or []
+        logger.info(f"Querying {pair} from {start_date} to {end_date}")
 
-        sorted_items = sorted(items, key=lambda x: x["Date"])
+        response = table.query(
+            KeyConditionExpression=Key("CurrencyPair").eq(pair)
+            & Key("Date").between(start_date, end_date)
+        )
 
-        return sorted_items
+        items = response.get("Items", [])
+
+        return {
+            "pair": pair,
+            "range": f"{start_date} to {end_date}",
+            "count": len(items),
+            "data": items,
+        }
+
     except Exception as e:
-        return {"error": str(e)}
+        logger.error(f"DynamoDB Query Error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
