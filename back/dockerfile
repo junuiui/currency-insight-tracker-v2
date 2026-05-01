@@ -1,0 +1,24 @@
+FROM python:3.12-slim
+
+# 2. 컨테이너 내부 작업 디렉토리 설정
+WORKDIR /app
+
+# 3. 환경 변수 설정 
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# 4. dependencies
+COPY requirements.txt .
+
+# 5. library
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 6. 나머지 소스 코드 복사
+COPY . .
+
+# 7. FastAPI의 기본 포트인 8000번 노출
+EXPOSE 8000
+
+# 8. 운영 환경용 실행 명령어 (fastapi run 사용)
+# --host 0.0.0.0은 외부(ALB) 요청을 받기 위해 필수입니다.
+CMD ["fastapi", "run", "main.py", "--port", "8000", "--host", "0.0.0.0"]
