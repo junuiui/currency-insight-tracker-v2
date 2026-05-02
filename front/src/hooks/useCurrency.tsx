@@ -28,7 +28,7 @@ export function useCurrency() {
         setLoading(true);
         try {
             const pair = `${baseCurrency}_${targetCurrency}`;
-            const API_URL = `${ENV_API_URL}?pair=${pair}&days=${days}`;
+            const API_URL = `${ENV_API_URL}/api/rates?pair=${pair}&days=${days}`;
             const response = await fetch(API_URL);
             const result: ApiResponse = await response.json();
 
