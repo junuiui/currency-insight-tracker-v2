@@ -30,13 +30,13 @@ The transition from Serverless to a Containerized architecture was driven by sev
 - [x] **Local Testing**: Verify the containerized app using `docker-compose`.
 
 ### Phase 2: Infrastructure as Code (Terraform)
-- [ ] **Networking (VPC)**: Design a VPC with Public/Private subnets, IGW, and NAT Gateway.
-- [ ] **Load Balancing**: Configure an **Application Load Balancer (ALB)** to handle incoming traffic.
-- [ ] **Container Registry**: Set up **Amazon ECR** for automated image storage.
-- [ ] **Orchestration**: Define **ECS Cluster**, **Task Definitions**, and **Fargate Services**.
+- [x] **Networking (VPC)**: Design a VPC with Public/Private subnets, IGW, and NAT Gateway.
+- [x] **Load Balancing**: Configure an **Application Load Balancer (ALB)** to handle incoming traffic.
+- [x] **Container Registry**: Set up **Amazon ECR** for automated image storage.
+- [x] **Orchestration**: Define **ECS Cluster**, **Task Definitions**, and **Fargate Services**.
 
 ### Phase 3: Automated CI/CD Pipeline
-- [ ] **Docker Pipeline**: Automate `docker build` and `docker push` to ECR on `git push`.
+- [x] **Docker Pipeline**: Automate `docker build` and `docker push` to ECR on `git push`.
 - [ ] **Deployment Automation**: Implement "Rolling Update" deployment to ECS.
 - [ ] **Security Scanning**: (Bonus) Integrate Trivy or AWS Inspector for container vulnerability scanning.
 
