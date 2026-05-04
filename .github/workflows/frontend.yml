@@ -1,4 +1,4 @@
-name: Frontend CI/CD
+name: Currency-v2 Frontend CI/CD
 
 on:
   push:
