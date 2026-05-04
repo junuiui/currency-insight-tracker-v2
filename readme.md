@@ -1,48 +1,61 @@
 # Currency Insight Tracker V2
-> **Production-Grade Containerized Architecture with AWS ECS, Terraform & GitHub Actions**
+> **Enterprise-Grade Containerized Architecture with AWS ECS Fargate, Terraform & Full CI/CD Automation**
 
-This repository represents the second iteration (V2) of the Currency Insight Tracker. While V1 focused on a Serverless (Lambda) approach, V2 is engineered for **Enterprise-level scalability, fine-grained network control, and container orchestration** using a modern DevOps stack.
-
----
-
-## 🏗 Why V2? (The Engineering Shift)
-The transition from Serverless to a Containerized architecture was driven by several key factors:
-- **Consistent Performance**: Eliminating "Cold Starts" inherent in AWS Lambda for predictable low-latency response.
-- **Environment Parity**: Leveraging **Docker** to ensure the exact same environment from local development to production.
-- **Granular Networking**: Moving from a public serverless environment to a custom **VPC** with Private Subnets for enhanced security.
-- **Orchestration**: Managing long-running services and auto-scaling policies via **Amazon ECS (Fargate)**.
+This repository represents the advanced evolution of the Currency Insight Tracker. Moving beyond the limitations of simple serverless functions, V2 implements a **Production-Ready Cloud Architecture** focused on scalability, security, and automated delivery.
 
 ---
 
-## 🛠 Planned Tech Stack
-- **Backend**: Node.js (Express) or Python (FastAPI) - *Decoupled from the frontend.*
-- **Infrastructure**: AWS (VPC, ECS Fargate, ALB, ECR, DynamoDB)
-- **IaC**: Terraform (Modular design)
-- **CI/CD**: GitHub Actions (Docker Build & Push to ECR, ECS Service Update)
+## Why V2? (Engineering Transformation)
+The shift from V1 (Serverless) to V2 (Containerized) was a strategic move to master modern DevOps practices:
+- **Zero Cold Starts**: Migrated to **ECS Fargate** for consistent, high-performance API responses.
+- **Modern Infrastructure**: Implemented a **Custom VPC** with Public/Private subnets for strict network isolation.
+- **Infrastructure as Code (IaC)**: 100% of the AWS resources are managed via **Terraform**, ensuring reproducibility and version control.
+- **Full-Stack Automation**: Integrated **GitHub Actions** for seamless CI/CD, from code push to CloudFront invalidation.
 
 ---
 
-## 🗺 Implementation Roadmap (TODOs)
+## Tech Stack
+### **Infrastructure & DevOps**
+- **Cloud**: AWS (VPC, ECS Fargate, ALB, ECR, S3, DynamoDB, CloudFront)
+- **IaC**: Terraform (Modular Architecture)
+- **CI/CD**: GitHub Actions
+- **Containerization**: Docker (Multi-stage builds)
 
-### Phase 1: Application Modernization
-- [x] **Decouple Backend**: Refactor Lambda logic into a standalone Express/FastAPI server.
-- [x] **Containerization**: Write a multi-stage `Dockerfile` to optimize image size.
-- [x] **Local Testing**: Verify the containerized app using `docker-compose`.
-
-### Phase 2: Infrastructure as Code (Terraform)
-- [x] **Networking (VPC)**: Design a VPC with Public/Private subnets, IGW, and NAT Gateway.
-- [x] **Load Balancing**: Configure an **Application Load Balancer (ALB)** to handle incoming traffic.
-- [x] **Container Registry**: Set up **Amazon ECR** for automated image storage.
-- [x] **Orchestration**: Define **ECS Cluster**, **Task Definitions**, and **Fargate Services**.
-
-### Phase 3: Automated CI/CD Pipeline
-- [x] **Docker Pipeline**: Automate `docker build` and `docker push` to ECR on `git push`.
-- [ ] **Deployment Automation**: Implement "Rolling Update" deployment to ECS.
-- [ ] **Security Scanning**: (Bonus) Integrate Trivy or AWS Inspector for container vulnerability scanning.
-
-### Phase 4: Observability & Security
-- [ ] **Logging**: Centralize logs using **CloudWatch Logs**.
-- [ ] **Monitoring**: Set up CloudWatch Alarms for CPU/Memory utilization.
-- [ ] **Least Privilege**: Refine IAM roles for ECS Task Execution.
+### **Application Layer**
+- **Backend**: Python (FastAPI) - *Asynchronous API for high concurrency*
+- **Frontend**: React (Vite) - *Optimized static assets served via CloudFront*
 
 ---
+
+## System Architecture
+The architecture is designed for high availability and security:
+1. **Frontend**: React app hosted on **S3**, distributed via **CloudFront** (CDN).
+2. **Traffic Control**: **Application Load Balancer (ALB)** routes `/api/*` traffic to the backend.
+3. **Compute**: **ECS Fargate** runs containerized FastAPI tasks in Private Subnets.
+4. **Data**: **DynamoDB** provides a serverless, scalable NoSQL data store.
+
+
+
+---
+
+## CI/CD Pipeline Flow
+The project utilizes two distinct pipelines for specialized deployment:
+
+### **Backend (Container Deployment)**
+1. Trigger: `git push` to `back/**`
+2. Build: Create Docker image with optimized multi-stage build.
+3. Registry: Push image to **Amazon ECR**.
+4. Deploy: **Force new deployment** on ECS Service to pull the latest image.
+
+### **Frontend (Static Deployment)**
+1. Trigger: `git push` to `front/**`
+2. Build: `npm run build` with environment variables.
+3. Sync: Upload assets to **S3** and delete old files.
+4. Invalidation: Clear **CloudFront** cache for immediate global updates.
+
+---
+
+## 🗺 Implementation Status
+- [x] **Phase 1**: Application Modernization (FastAPI & Docker)
+- [x] **Phase 2**: Infrastructure as Code (Terraform VPC, ECS, ALB)
+- [x] **Phase 3**: Automated CI/CD (GitHub Actions)
