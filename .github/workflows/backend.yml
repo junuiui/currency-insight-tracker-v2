@@ -2,7 +2,7 @@ name: Currency-v2 Backend CI/CD
 
 on:
   push:
-    path:
+    paths:
       - 'back/**'
     branches:
       - main
