@@ -14,7 +14,10 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "https://d1k3wpndkg270x.cloudfront.net"  # 본인의 CloudFront 주소 추가
+    ],
     allow_credentials=True,
     allow_methods=["*"],  # GET, POST 등 모든 메소드 허용
     allow_headers=["*"],  # 모든 헤더 허용
