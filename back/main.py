@@ -15,7 +15,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173",
+        "http://localhost:5173", 
         "https://d1k3wpndkg270x.cloudfront.net"
     ],
     allow_credentials=True,
